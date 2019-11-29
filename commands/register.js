@@ -8,6 +8,24 @@ const persons = require('../data/persons.json');
 const command = `register`;
 const desc = 'Register a person';
 
+const confirm = async message =>
+  (
+    await prompt({
+      name: 'ok',
+      type: 'confirm',
+      message,
+    })
+  ).ok;
+
+const getAvailableId = baseId => {
+  let counter = 2;
+  while (_.find(persons, ['id', `${baseId}${counter}`])) {
+    counter += 1;
+  }
+
+  return `${baseId}${counter}`;
+};
+
 const handler = async () => {
   const questions = [
     {
@@ -28,8 +46,18 @@ const handler = async () => {
 
   const { firstname, lastname, kids } = await prompt(questions);
 
+  let id = _.kebabCase(`${firstname} ${lastname}`);
+
+  if (_.find(persons, ['id', id])) {
+    if (!confirm(`${firstname} ${lastname} is already registered. Do you want to continue`)) {
+      return;
+    }
+
+    id = getAvailableId(id);
+  }
+
   persons.push({
-    id: _.kebabCase(`${firstname} ${lastname}`),
+    id,
     firstname,
     lastname,
     kids,
