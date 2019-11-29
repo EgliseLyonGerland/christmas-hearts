@@ -22,6 +22,7 @@
     "yargs": "15.0.2"
   },
   "scripts": {
-    "draw": "node index draw"
+    "draw": "node index draw",
+    "register": "node index register"
   }
 }
