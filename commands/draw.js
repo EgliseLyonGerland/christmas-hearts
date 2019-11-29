@@ -10,14 +10,13 @@ const {
   findKey,
   size,
   forEach,
-  mapValues,
 } = require('lodash');
 const fs = require('fs');
 const path = require('path');
 const { prompt } = require('inquirer');
 const termSize = require('term-size');
 
-const persons = require('../data/persons.json');
+const persons = require('../data/persons');
 
 const command = `draw`;
 const desc = "Let's draw";
@@ -39,30 +38,30 @@ const ask = async options => {
   return answer || null;
 };
 
-// const confirm = message =>
-//   ask({
-//     name: 'continue',
-//     type: 'confirm',
-//     message,
-//   });
+const confirm = message =>
+  ask({
+    name: 'continue',
+    type: 'confirm',
+    message,
+  });
 
-const isExcluded = ({ exclude = null }, name) => {
+const isExcluded = ({ lastname, exclude = null }, current) => {
+  if (lastname === current.lastname) {
+    return true;
+  }
+
   if (!isArray(exclude)) {
     return false;
   }
 
-  return some(exclude, item => {
-    const reg = new RegExp(item);
-
-    return reg.test(name);
-  });
+  return some(exclude, item => item === current.id);
 };
 
 const getAvailablePersons = (person, selectedPersons, linkedPersons) =>
   reduce(
     selectedPersons,
     (acc, current) => {
-      if (person.name === current.name) {
+      if (person.id === current.id) {
         return acc;
       }
 
@@ -70,15 +69,15 @@ const getAvailablePersons = (person, selectedPersons, linkedPersons) =>
         return acc;
       }
 
-      if (isExcluded(person, current.name)) {
+      if (isExcluded(person, current)) {
         return acc;
       }
 
-      if (some(linkedPersons, ['name', current.name])) {
+      if (some(linkedPersons, ['id', current.id])) {
         return acc;
       }
 
-      if (findKey(linkedPersons, ['name', person.name]) === current.name) {
+      if (findKey(linkedPersons, ['id', person.id]) === current.id) {
         return acc;
       }
 
@@ -87,8 +86,8 @@ const getAvailablePersons = (person, selectedPersons, linkedPersons) =>
     [],
   );
 
-const shake = names => {
-  const selectedPersons = shuffle(filter(persons, ({ name }) => includes(names, name)));
+const shake = ids => {
+  const selectedPersons = shuffle(filter(persons, ({ id }) => includes(ids, id)));
 
   const linkedPersons = {};
 
@@ -99,7 +98,7 @@ const shake = names => {
     let chosenPerson;
 
     if (remain === 2 && size(availablePersons) === 2) {
-      if (linkedPersons[availablePersons[0].name]) {
+      if (linkedPersons[availablePersons[0].id]) {
         [, chosenPerson] = availablePersons;
       } else {
         [chosenPerson] = availablePersons;
@@ -108,17 +107,7 @@ const shake = names => {
       chosenPerson = sample(availablePersons);
     }
 
-    linkedPersons[person.name] = chosenPerson;
-
-    // console.log(
-    //   person.name,
-    //   person.kids ? '(kids)' : '',
-    //   '=>',
-    //   get(chosenPerson, 'name'),
-    //   get(chosenPerson, 'kids') ? '(kids)' : '',
-    //   remain,
-    //   size(availablePersons),
-    // );
+    linkedPersons[person.id] = chosenPerson.id;
   });
 
   return linkedPersons;
@@ -130,9 +119,9 @@ const handler = async ({ year }) => {
   const participants = await ask({
     type: 'checkbox',
     message: 'Select the participants',
-    choices: map(persons, ({ name, kids }) => ({
-      value: name,
-      name: `${name}${kids ? ' (kid)' : ''}`,
+    choices: map(persons, ({ id, fullname, kids }) => ({
+      value: id,
+      name: `${fullname}${kids ? ' (kid)' : ''}`,
       checked: true,
     })),
     pageSize: Math.max(10, rows - 10),
@@ -145,15 +134,15 @@ const handler = async ({ year }) => {
     },
   });
 
-  // if (!confirm(`Are you ready to random draw with these ${participants.length} persons?`)) {
-  //   return;
-  // }
+  if (!(await confirm(`Are you ready to random draw with these ${participants.length} persons?`))) {
+    return;
+  }
 
-  const mapping = mapValues(shake(participants), ({ name }) => name);
+  const mapping = shake(participants);
 
   fs.writeFileSync(
     path.join(__dirname, `../data/draws/${year}.json`),
-    JSON.stringify(mapping, null, 2),
+    `${JSON.stringify(mapping, null, 2)}\n`,
   );
 };
 
