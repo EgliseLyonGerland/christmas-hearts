@@ -1,8 +1,5 @@
 const {
   map,
-  transform,
-  pick,
-  pickBy,
   includes,
   filter,
   reduce,
@@ -11,14 +8,13 @@ const {
   sample,
   some,
   findKey,
-  get,
   size,
   forEach,
   mapValues,
 } = require('lodash');
 const fs = require('fs');
 const path = require('path');
-const { prompt, Separator } = require('inquirer');
+const { prompt } = require('inquirer');
 const termSize = require('term-size');
 
 const persons = require('../data/persons.json');
@@ -43,12 +39,12 @@ const ask = async options => {
   return answer || null;
 };
 
-const confirm = message =>
-  ask({
-    name: 'continue',
-    type: 'confirm',
-    message,
-  });
+// const confirm = message =>
+//   ask({
+//     name: 'continue',
+//     type: 'confirm',
+//     message,
+//   });
 
 const isExcluded = ({ exclude = null }, name) => {
   if (!isArray(exclude)) {
@@ -104,9 +100,9 @@ const shake = names => {
 
     if (remain === 2 && size(availablePersons) === 2) {
       if (linkedPersons[availablePersons[0].name]) {
-        chosenPerson = availablePersons[1];
+        [, chosenPerson] = availablePersons;
       } else {
-        chosenPerson = availablePersons[0];
+        [chosenPerson] = availablePersons;
       }
     } else {
       chosenPerson = sample(availablePersons);
