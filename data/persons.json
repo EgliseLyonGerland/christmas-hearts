@@ -7,6 +7,13 @@
     "exclude": []
   },
   {
+    "id": "amelie-fournier",
+    "firstname": "Amélie",
+    "lastname": "Fournier",
+    "kids": false,
+    "exclude": []
+  },
+  {
     "id": "amy-haddad",
     "firstname": "Amy",
     "lastname": "Haddad",
@@ -21,10 +28,24 @@
     "exclude": []
   },
   {
+    "id": "annie-tshika",
+    "firstname": "Annie",
+    "lastname": "Tshika",
+    "kids": false,
+    "exclude": []
+  },
+  {
     "id": "caedmon-haddad",
     "firstname": "Caedmon",
     "lastname": "Haddad",
     "kids": true,
+    "exclude": []
+  },
+  {
+    "id": "charlene-picq",
+    "firstname": "Charlène",
+    "lastname": "Picq",
+    "kids": false,
     "exclude": []
   },
   {
@@ -45,6 +66,13 @@
     "id": "dimitri-cobb",
     "firstname": "Dimitri",
     "lastname": "Cobb",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "dwight-bornes",
+    "firstname": "Dwight",
+    "lastname": "Bornes",
     "kids": false,
     "exclude": []
   },
@@ -77,6 +105,13 @@
     "exclude": []
   },
   {
+    "id": "flora-julien",
+    "firstname": "Flora",
+    "lastname": "Julien",
+    "kids": false,
+    "exclude": []
+  },
+  {
     "id": "gilles-campoy",
     "firstname": "Gilles",
     "lastname": "Campoy",
@@ -91,6 +126,13 @@
     "exclude": []
   },
   {
+    "id": "isaque-carreto",
+    "firstname": "Isaque",
+    "lastname": "Carreto",
+    "kids": false,
+    "exclude": []
+  },
+  {
     "id": "ivan-hamelin",
     "firstname": "Ivan",
     "lastname": "Hamelin",
@@ -98,9 +140,37 @@
     "exclude": []
   },
   {
+    "id": "jean-francois-maniere",
+    "firstname": "Jean-François",
+    "lastname": "Manière",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "jeronimo-avelluneda",
+    "firstname": "Jeronimo",
+    "lastname": "Avelluneda",
+    "kids": true,
+    "exclude": []
+  },
+  {
     "id": "jonah-haddad",
     "firstname": "Jonah",
     "lastname": "Haddad",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "joshua-sims",
+    "firstname": "Joshua",
+    "lastname": "Sims",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "jung-yeon-gosselin",
+    "firstname": "Jung-Yeon",
+    "lastname": "Gosselin",
     "kids": false,
     "exclude": []
   },
@@ -115,6 +185,20 @@
     "id": "karine-comte",
     "firstname": "Karine",
     "lastname": "Comte",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "laetitia-grare",
+    "firstname": "Laetitia",
+    "lastname": "Grare",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "laetitia-stauffer",
+    "firstname": "Laetitia",
+    "lastname": "Stauffer",
     "kids": false,
     "exclude": []
   },
@@ -168,10 +252,52 @@
     "exclude": []
   },
   {
+    "id": "mireille-yoyotte-landry",
+    "firstname": "Mireille",
+    "lastname": "Yoyotte Landry",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "nathalie-merlano",
+    "firstname": "Nathalie",
+    "lastname": "Merlano",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "orlane-batman",
+    "firstname": "Orlane",
+    "lastname": "Batman",
+    "kids": false,
+    "exclude": []
+  },
+  {
     "id": "pascal-haddad",
     "firstname": "Pascal",
     "lastname": "Haddad",
     "kids": true,
+    "exclude": []
+  },
+  {
+    "id": "pierrick-fournier",
+    "firstname": "Pierrick",
+    "lastname": "Fournier",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "qiqi-zhu",
+    "firstname": "Qiqi",
+    "lastname": "Zhu",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "rafaella-bartz-pena",
+    "firstname": "Rafaella",
+    "lastname": "Bartz Pena",
+    "kids": false,
     "exclude": []
   },
   {
@@ -203,10 +329,31 @@
     "exclude": []
   },
   {
+    "id": "tehele-mpassi",
+    "firstname": "Tehele",
+    "lastname": "Mpassi",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "teresa-carreto",
+    "firstname": "Teresa",
+    "lastname": "Carreto",
+    "kids": false,
+    "exclude": []
+  },
+  {
     "id": "theotime-julien",
     "firstname": "Théotime",
     "lastname": "Julien",
     "kids": true,
+    "exclude": []
+  },
+  {
+    "id": "thierry-comte",
+    "firstname": "Thierry",
+    "lastname": "Comte",
+    "kids": false,
     "exclude": []
   },
   {
@@ -224,10 +371,45 @@
     "exclude": []
   },
   {
+    "id": "tom-kristanek",
+    "firstname": "Tom",
+    "lastname": "Kristanek",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "toyese-oyegoke",
+    "firstname": "Toyese",
+    "lastname": "Oyegoke",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "trina-collet",
+    "firstname": "Trina",
+    "lastname": "Collet",
+    "kids": false,
+    "exclude": []
+  },
+  {
     "id": "vallouise-sarran",
     "firstname": "Vallouise",
     "lastname": "Sarran",
     "kids": true,
+    "exclude": []
+  },
+  {
+    "id": "vincent-collet",
+    "firstname": "Vincent",
+    "lastname": "Collet",
+    "kids": false,
+    "exclude": []
+  },
+  {
+    "id": "yi-hsuan-chen",
+    "firstname": "Yi-Hsuan",
+    "lastname": "Chen",
+    "kids": false,
     "exclude": []
   },
   {
