@@ -49,7 +49,9 @@ const handler = async () => {
   let id = _.kebabCase(`${firstname} ${lastname}`);
 
   if (_.find(persons, ['id', id])) {
-    if (!confirm(`${firstname} ${lastname} is already registered. Do you want to continue`)) {
+    if (
+      !(await confirm(`${firstname} ${lastname} is already registered. Do you want to continue`))
+    ) {
       return;
     }
 
@@ -71,6 +73,10 @@ const handler = async () => {
   content = format(content, { parser: 'json' });
 
   fs.writeFileSync(filepath, content);
+
+  if (await confirm('Would you like to register another person?')) {
+    await handler();
+  }
 };
 
 module.exports = {
