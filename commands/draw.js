@@ -1,22 +1,11 @@
-const {
-  map,
-  includes,
-  filter,
-  reduce,
-  isArray,
-  shuffle,
-  sample,
-  some,
-  findKey,
-  size,
-  forEach,
-} = require('lodash');
+const { map, includes, filter, shuffle, sample, findKey, size, forEach } = require('lodash');
 const fs = require('fs');
 const path = require('path');
 const { prompt } = require('inquirer');
 const termSize = require('term-size');
 
 const persons = require('../data/persons');
+const draws = require('../data/draws');
 
 const command = `draw`;
 const desc = "Let's draw";
@@ -45,60 +34,46 @@ const confirm = message =>
     message,
   });
 
-const isExcluded = ({ lastname, exclude = null }, current) => {
-  if (lastname === current.lastname) {
-    return true;
-  }
-
-  if (!isArray(exclude)) {
-    return false;
-  }
-
-  return some(exclude, item => item === current.id);
-};
-
-const getAvailablePersons = (person, selectedPersons, linkedPersons) =>
-  reduce(
-    selectedPersons,
-    (acc, current) => {
-      if (person.id === current.id) {
-        return acc;
+const getAvailablePersons = (person, participants, mapping) =>
+  filter(
+    participants,
+    participant => {
+      if (person.id === participant.id) {
+        return false;
       }
 
-      if (person.kids !== current.kids) {
-        return acc;
+      if (person.kids !== participant.kids) {
+        return false;
       }
 
-      if (isExcluded(person, current)) {
-        return acc;
+      if (person.exclude.includes(participant.id)) {
+        return false;
       }
 
-      if (some(linkedPersons, ['id', current.id])) {
-        return acc;
+      if (Object.values(mapping).includes(participant.id)) {
+        return false;
       }
 
-      if (findKey(linkedPersons, ['id', person.id]) === current.id) {
-        return acc;
+      if (findKey(mapping, id => id === person.id) === participant.id) {
+        return false;
       }
 
-      return [...acc, current];
+      return true;
     },
     [],
   );
 
-const shake = ids => {
-  const selectedPersons = shuffle(filter(persons, ({ id }) => includes(ids, id)));
+const shake = participants => {
+  const mapping = {};
 
-  const linkedPersons = {};
-
-  forEach(selectedPersons, person => {
-    const availablePersons = getAvailablePersons(person, selectedPersons, linkedPersons);
-    const remain = size(selectedPersons) - size(linkedPersons);
+  forEach(participants, person => {
+    const availablePersons = getAvailablePersons(person, participants, mapping);
+    const remain = size(participants) - size(mapping);
 
     let chosenPerson;
 
     if (remain === 2 && size(availablePersons) === 2) {
-      if (linkedPersons[availablePersons[0].id]) {
+      if (mapping[availablePersons[0].id]) {
         [, chosenPerson] = availablePersons;
       } else {
         [chosenPerson] = availablePersons;
@@ -107,16 +82,45 @@ const shake = ids => {
       chosenPerson = sample(availablePersons);
     }
 
-    linkedPersons[person.id] = chosenPerson.id;
+    mapping[person.id] = chosenPerson.id;
   });
 
-  return linkedPersons;
+  return mapping;
+};
+
+const resolveExclude = (participants, year) => {
+  return participants.map(person => {
+    let { exclude = [] } = person;
+
+    // Exclude same family members
+    exclude = exclude.concat(map(filter(persons, ['lastname', person.lastname]), 'id'));
+
+    // Exclude persons for whom he has already prayed it the two past year
+    for (let i = 1; i <= 2; i += 1) {
+      const pastYear = year - i;
+
+      if (!draws[pastYear]) {
+        break;
+      }
+
+      const draw = draws[pastYear];
+
+      if (draw[person.id]) {
+        exclude.push(draw[person.id]);
+      }
+    }
+
+    return {
+      ...person,
+      exclude,
+    };
+  });
 };
 
 const handler = async ({ year }) => {
   const { rows } = termSize();
 
-  const participants = await ask({
+  let participants = await ask({
     type: 'checkbox',
     message: 'Select the participants',
     choices: map(persons, ({ id, fullname, kids }) => ({
@@ -137,6 +141,10 @@ const handler = async ({ year }) => {
   if (!(await confirm(`Are you ready to random draw with these ${participants.length} persons?`))) {
     return;
   }
+
+  participants = filter(persons, ({ id }) => includes(participants, id));
+  participants = resolveExclude(participants, year);
+  participants = shuffle(participants);
 
   const mapping = shake(participants);
 
